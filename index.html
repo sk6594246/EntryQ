@@ -33,18 +33,18 @@
       <div class="role-grid">
         <button class="role-card" data-role="guard">
           <span class="role-icon">🛡️</span>
-          <span class="role-title">Guard Kiosk</span>
-          <span class="role-desc">Fast entry & validation</span>
+          <span class="role-title">Watchmen</span>
+          <span class="role-desc">Guard kiosk – entry & validation</span>
         </button>
         <button class="role-card" data-role="resident">
           <span class="role-icon">🏠</span>
-          <span class="role-title">Resident</span>
+          <span class="role-title">Owner / Tenant</span>
           <span class="role-desc">Create guest passes</span>
         </button>
         <button class="role-card" data-role="admin">
           <span class="role-icon">⚙️</span>
-          <span class="role-title">Admin</span>
-          <span class="role-desc">Logs & setup</span>
+          <span class="role-title">Society Admin</span>
+          <span class="role-desc">People, logs & setup</span>
         </button>
       </div>
     </section>
@@ -55,13 +55,11 @@
         <div class="kiosk-clock" id="kiosk-clock">--:--</div>
         <button class="btn-icon" id="btn-guard-exit" title="Exit">✕</button>
       </header>
-
       <nav class="kiosk-tabs">
         <button class="tab active" data-tab="validate">Validate</button>
         <button class="tab" data-tab="walkin">Walk-in</button>
         <button class="tab" data-tab="logs">Today</button>
       </nav>
-
       <div id="guard-validate" class="tab-panel active">
         <div class="kiosk-panel">
           <h2>Scan / Enter Code</h2>
@@ -73,7 +71,6 @@
           <div id="validate-result" class="result-box hidden"></div>
         </div>
       </div>
-
       <div id="guard-walkin" class="tab-panel">
         <div class="kiosk-panel">
           <h2>Walk-in / Delivery</h2>
@@ -101,7 +98,6 @@
           <div id="walkin-result" class="result-box hidden"></div>
         </div>
       </div>
-
       <div id="guard-logs" class="tab-panel">
         <div class="kiosk-panel">
           <h2>Today’s Entries</h2>
@@ -116,12 +112,10 @@
         <h1>My Passes</h1>
         <button class="btn-icon" id="btn-res-exit">✕</button>
       </header>
-
       <div class="content">
         <button id="btn-new-invite" class="btn btn-primary btn-block">+ Create Guest Pass</button>
         <div id="my-invites" class="invite-list"></div>
       </div>
-
       <div id="modal-invite" class="modal hidden">
         <div class="modal-card">
           <h2>New Guest Pass</h2>
@@ -150,17 +144,55 @@
     <section id="view-admin" class="view">
       <header class="topbar">
         <button class="btn-icon" id="btn-admin-back">←</button>
-        <h1>Admin</h1>
+        <h1>Society Admin</h1>
         <button class="btn-icon" id="btn-admin-exit">✕</button>
       </header>
+      <nav class="admin-tabs kiosk-tabs">
+        <button class="tab active" data-tab="people">People</button>
+        <button class="tab" data-tab="logs">Logs</button>
+        <button class="tab" data-tab="invites">Invites</button>
+        <button class="tab" data-tab="tools">Tools</button>
+      </nav>
       <div class="content">
         <div class="admin-stats" id="admin-stats"></div>
-        <h3>All Entry Logs</h3>
-        <div id="admin-logs" class="log-list"></div>
-        <h3>All Invites</h3>
-        <div id="admin-invites" class="invite-list"></div>
-        <button id="btn-export" class="btn btn-ghost btn-block">Export JSON (backup)</button>
-        <button id="btn-clear-data" class="btn btn-danger btn-block">Clear Society Data</button>
+        <div id="admin-people" class="tab-panel active">
+          <button id="btn-add-person" class="btn btn-primary btn-block">+ Add Person</button>
+          <div id="people-list" class="people-list"></div>
+        </div>
+        <div id="admin-logs" class="tab-panel">
+          <div id="admin-logs-list" class="log-list"></div>
+        </div>
+        <div id="admin-invites" class="tab-panel">
+          <div id="admin-invites-list" class="invite-list"></div>
+        </div>
+        <div id="admin-tools" class="tab-panel">
+          <button id="btn-export" class="btn btn-ghost btn-block">Export JSON (backup)</button>
+          <button id="btn-clear-data" class="btn btn-danger btn-block">Clear Society Data</button>
+        </div>
+      </div>
+      <div id="modal-person" class="modal hidden">
+        <div class="modal-card">
+          <h2 id="person-modal-title">Add Person</h2>
+          <form id="person-form">
+            <label>Name *</label>
+            <input name="name" class="input" required placeholder="Full name" />
+            <label>Phone</label>
+            <input name="phone" class="input" type="tel" placeholder="10-digit mobile" />
+            <label>Unit / Flat</label>
+            <input name="unit" class="input" placeholder="e.g. A-1204" />
+            <label>Role *</label>
+            <select name="role" class="input" required>
+              <option value="society_admin">Society Admin</option>
+              <option value="owner">Owner</option>
+              <option value="tenant">Tenant</option>
+              <option value="watchmen">Watchmen</option>
+            </select>
+            <div class="btn-row">
+              <button type="button" class="btn btn-ghost" id="btn-cancel-person">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   </div>
@@ -170,6 +202,7 @@
   <script src="js/boot.js"></script>
   <script src="js/guard.js"></script>
   <script src="js/resident.js"></script>
+  <script src="js/people.js"></script>
   <script src="js/admin.js"></script>
   <script src="js/app.js"></script>
   <script>
