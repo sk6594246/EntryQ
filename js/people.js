@@ -43,8 +43,10 @@ const People = {
       form.phone.value = person.phone || '';
       form.unit.value = person.unit || '';
       form.role.value = person.role || 'tenant';
+      form.pin.value = person.pin || '';
     } else {
       form.role.value = 'tenant';
+      form.pin.value = '';
     }
     modal.classList.remove('hidden');
   },
@@ -56,9 +58,15 @@ const People = {
       phone: fd.get('phone'),
       unit: fd.get('unit'),
       role: fd.get('role'),
+      pin: fd.get('pin'),
     };
     if (!payload.name || !String(payload.name).trim()) {
       alert('Name is required');
+      return;
+    }
+    const needsPin = ['watchmen', 'owner', 'tenant'].includes(payload.role);
+    if (needsPin && !String(payload.pin || '').trim()) {
+      alert('PIN is required for Watchmen, Owner and Tenant (used at login)');
       return;
     }
     const editId = form.dataset.editId;
@@ -92,6 +100,7 @@ const People = {
         <div class="meta">
           <span>${escapeHtml(p.unit || '—')}</span>
           <span>${escapeHtml(p.phone || '—')}</span>
+          <span>${p.pin ? 'PIN set' : 'No PIN'}</span>
         </div>
         <div class="person-actions">
           <button type="button" class="btn btn-ghost btn-sm btn-edit-person">Edit</button>
