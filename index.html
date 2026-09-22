@@ -39,7 +39,7 @@
         <button class="role-card" data-role="resident">
           <span class="role-icon">🏠</span>
           <span class="role-title">Owner / Tenant</span>
-          <span class="role-desc">Create guest passes</span>
+          <span class="role-desc">Create guest passes (invite visitors)</span>
         </button>
         <button class="role-card" data-role="admin">
           <span class="role-icon">⚙️</span>
@@ -184,9 +184,12 @@
             <select name="role" class="input" required>
               <option value="society_admin">Society Admin</option>
               <option value="owner">Owner</option>
-              <option value="tenant">Tenant</option>
+              <option value="tenant">Tenant (rent)</option>
               <option value="watchmen">Watchmen</option>
             </select>
+            <label>Login PIN *</label>
+            <input name="pin" class="input" inputmode="numeric" pattern="[0-9]*" placeholder="4–6 digit PIN for login" />
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem">Required for Watchmen, Owner & Tenant. Used at role login.</p>
             <div class="btn-row">
               <button type="button" class="btn btn-ghost" id="btn-cancel-person">Cancel</button>
               <button type="submit" class="btn btn-primary">Save</button>
@@ -197,9 +200,26 @@
     </section>
   </div>
 
+  <div id="modal-pin" class="modal hidden">
+    <div class="modal-card">
+      <h2 id="pin-modal-title">Login</h2>
+      <p id="pin-modal-hint" style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem"></p>
+      <form id="pin-form">
+        <label>Society PIN</label>
+        <input id="pin-input" name="pin" class="input-xl" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="••••" required />
+        <p id="pin-error" class="hidden" style="color:#fecaca;margin-bottom:0.75rem"></p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-ghost" id="btn-cancel-pin">Cancel</button>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/boot.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/guard.js"></script>
   <script src="js/resident.js"></script>
   <script src="js/people.js"></script>
