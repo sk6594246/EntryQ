@@ -10,13 +10,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>EntryQ – Gate</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
   <div id="app">
-    <!-- Boot / Society select -->
     <section id="view-boot" class="view active">
       <div class="boot-card">
         <div class="logo">Entry<span>Q</span></div>
@@ -26,7 +25,6 @@
       </div>
     </section>
 
-    <!-- Role picker after society -->
     <section id="view-role" class="view">
       <header class="topbar">
         <button class="btn-icon" id="btn-back-boot" aria-label="Back">←</button>
@@ -51,7 +49,6 @@
       </div>
     </section>
 
-    <!-- ==================== GUARD KIOSK ==================== -->
     <section id="view-guard" class="view">
       <header class="topbar kiosk">
         <div class="kiosk-brand">EntryQ · <span id="guard-society-name"></span></div>
@@ -65,7 +62,6 @@
         <button class="tab" data-tab="logs">Today</button>
       </nav>
 
-      <!-- Validate Pass -->
       <div id="guard-validate" class="tab-panel active">
         <div class="kiosk-panel">
           <h2>Scan / Enter Code</h2>
@@ -78,7 +74,6 @@
         </div>
       </div>
 
-      <!-- Walk-in / Instant Approval -->
       <div id="guard-walkin" class="tab-panel">
         <div class="kiosk-panel">
           <h2>Walk-in / Delivery</h2>
@@ -107,7 +102,6 @@
         </div>
       </div>
 
-      <!-- Today's Logs -->
       <div id="guard-logs" class="tab-panel">
         <div class="kiosk-panel">
           <h2>Today’s Entries</h2>
@@ -116,7 +110,6 @@
       </div>
     </section>
 
-    <!-- ==================== RESIDENT ==================== -->
     <section id="view-resident" class="view">
       <header class="topbar">
         <button class="btn-icon" id="btn-res-back">←</button>
@@ -129,7 +122,6 @@
         <div id="my-invites" class="invite-list"></div>
       </div>
 
-      <!-- Create Invite Modal -->
       <div id="modal-invite" class="modal hidden">
         <div class="modal-card">
           <h2>New Guest Pass</h2>
@@ -155,7 +147,6 @@
       </div>
     </section>
 
-    <!-- ==================== ADMIN ==================== -->
     <section id="view-admin" class="view">
       <header class="topbar">
         <button class="btn-icon" id="btn-admin-back">←</button>
@@ -174,7 +165,12 @@
     </section>
   </div>
 
+  <script src="js/utils.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/boot.js"></script>
+  <script src="js/guard.js"></script>
+  <script src="js/resident.js"></script>
+  <script src="js/admin.js"></script>
   <script src="js/app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
