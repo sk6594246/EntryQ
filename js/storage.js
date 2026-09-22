@@ -63,6 +63,7 @@ const Storage = {
       phone: (payload.phone || '').trim(),
       unit: (payload.unit || '').trim(),
       role: payload.role || 'tenant',
+      pin: String(payload.pin || '').trim(),
       createdAt: new Date().toISOString(),
     };
     people.unshift(person);
@@ -78,6 +79,7 @@ const Storage = {
     if (patch.phone !== undefined) p.phone = String(patch.phone).trim();
     if (patch.unit !== undefined) p.unit = String(patch.unit).trim();
     if (patch.role !== undefined) p.role = patch.role;
+    if (patch.pin !== undefined) p.pin = String(patch.pin).trim();
     this._write(societyId, 'people', people);
     return p;
   },
@@ -89,6 +91,17 @@ const Storage = {
 
   countByRole(societyId, role) {
     return this.listPeople(societyId).filter((p) => p.role === role).length;
+  },
+
+  findByPin(societyId, pin, roles) {
+    const code = String(pin || '').trim();
+    if (!code) return null;
+    const allowed = Array.isArray(roles) ? roles : [roles];
+    return (
+      this.listPeople(societyId).find(
+        (p) => p.pin === code && allowed.includes(p.role)
+      ) || null
+    );
   },
 
   listInvites(societyId) {
