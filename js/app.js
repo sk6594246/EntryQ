@@ -1,6 +1,6 @@
 /**
  * EntryQ – Core app shell
- * Modules: utils → storage → boot → guard → resident → people → admin → app
+ * Modules: utils → storage → boot → auth → guard → resident → people → admin → app
  */
 
 const App = {
@@ -8,11 +8,13 @@ const App = {
     societyId: null,
     societyName: '',
     role: null,
+    person: null,
   },
 
   init() {
     Boot.bind();
     this.bindRole();
+    Auth.bind();
     Guard.bind();
     Resident.bind();
     People.bind();
@@ -24,14 +26,20 @@ const App = {
   bindRole() {
     document.getElementById('btn-back-boot')?.addEventListener('click', () => {
       this.state.societyId = null;
+      this.state.person = null;
+      this.state.role = null;
       this.showView('boot');
     });
     document.querySelectorAll('.role-card').forEach((card) => {
       card.addEventListener('click', () => {
-        this.state.role = card.dataset.role;
-        if (this.state.role === 'guard') Guard.enter();
-        else if (this.state.role === 'resident') Resident.enter();
-        else if (this.state.role === 'admin') Admin.enter();
+        const uiRole = card.dataset.role;
+        if (uiRole === 'admin') {
+          this.state.role = 'admin';
+          this.state.person = null;
+          Admin.enter();
+        } else if (uiRole === 'guard' || uiRole === 'resident') {
+          Auth.openForRole(uiRole);
+        }
       });
     });
   },
