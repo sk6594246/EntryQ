@@ -1,9 +1,14 @@
-const CACHE = 'entryq-v1';
+const CACHE = 'entryq-v2';
 const ASSETS = [
   './',
   './index.html',
   './css/app.css',
+  './js/utils.js',
   './js/storage.js',
+  './js/boot.js',
+  './js/guard.js',
+  './js/resident.js',
+  './js/admin.js',
   './js/app.js',
   './manifest.json',
   './icons/icon-192.png',
