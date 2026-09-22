@@ -1,13 +1,12 @@
 /**
  * EntryQ Storage Layer
- * localStorage first — designed so it can later be swapped for Cloudflare D1 API calls.
- * All records are scoped by societyId (multi-tenant SaaS ready).
+ * localStorage first — swap later for Cloudflare D1.
+ * All society data scoped by societyId (strict sandbox).
  */
 
 const STORAGE_PREFIX = 'entryq_';
 
 const Storage = {
-  // ---------- low-level ----------
   _key(societyId, collection) {
     return `${STORAGE_PREFIX}${societyId}_${collection}`;
   },
@@ -25,7 +24,6 @@ const Storage = {
     localStorage.setItem(this._key(societyId, collection), JSON.stringify(data));
   },
 
-  // ---------- societies (global) ----------
   listSocieties() {
     try {
       const raw = localStorage.getItem(STORAGE_PREFIX + 'societies');
@@ -42,11 +40,7 @@ const Storage = {
   createSociety(name) {
     const list = this.listSocieties();
     const id = 'soc_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    const society = {
-      id,
-      name: name.trim(),
-      createdAt: new Date().toISOString(),
-    };
+    const society = { id, name: name.trim(), createdAt: new Date().toISOString() };
     list.push(society);
     this.saveSocieties(list);
     return society;
@@ -56,7 +50,47 @@ const Storage = {
     return this.listSocieties().find((s) => s.id === id) || null;
   },
 
-  // ---------- Access Invites (passes / OTP) ----------
+  listPeople(societyId) {
+    return this._read(societyId, 'people');
+  },
+
+  createPerson(societyId, payload) {
+    const people = this.listPeople(societyId);
+    const person = {
+      id: 'ppl_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+      societyId,
+      name: (payload.name || '').trim(),
+      phone: (payload.phone || '').trim(),
+      unit: (payload.unit || '').trim(),
+      role: payload.role || 'tenant',
+      createdAt: new Date().toISOString(),
+    };
+    people.unshift(person);
+    this._write(societyId, 'people', people);
+    return person;
+  },
+
+  updatePerson(societyId, personId, patch) {
+    const people = this.listPeople(societyId);
+    const p = people.find((x) => x.id === personId);
+    if (!p) return null;
+    if (patch.name !== undefined) p.name = String(patch.name).trim();
+    if (patch.phone !== undefined) p.phone = String(patch.phone).trim();
+    if (patch.unit !== undefined) p.unit = String(patch.unit).trim();
+    if (patch.role !== undefined) p.role = patch.role;
+    this._write(societyId, 'people', people);
+    return p;
+  },
+
+  removePerson(societyId, personId) {
+    const people = this.listPeople(societyId).filter((x) => x.id !== personId);
+    this._write(societyId, 'people', people);
+  },
+
+  countByRole(societyId, role) {
+    return this.listPeople(societyId).filter((p) => p.role === role).length;
+  },
+
   listInvites(societyId) {
     return this._read(societyId, 'invites');
   },
@@ -97,7 +131,6 @@ const Storage = {
     return inv;
   },
 
-  // ---------- Gate Entry Logs ----------
   listLogs(societyId) {
     return this._read(societyId, 'logs');
   },
@@ -111,7 +144,6 @@ const Storage = {
       timestamp: new Date().toISOString(),
     };
     logs.unshift(log);
-    // keep last 500
     if (logs.length > 500) logs.length = 500;
     this._write(societyId, 'logs', logs);
     return log;
@@ -122,15 +154,14 @@ const Storage = {
     return this.listLogs(societyId).filter((l) => l.timestamp.startsWith(today));
   },
 
-  // ---------- helpers ----------
   _generateOTP() {
-    // 6-digit numeric, easy to type / speak at gate
     return String(Math.floor(100000 + Math.random() * 900000));
   },
 
   exportSociety(societyId) {
     return {
       society: this.getSociety(societyId),
+      people: this.listPeople(societyId),
       invites: this.listInvites(societyId),
       logs: this.listLogs(societyId),
       exportedAt: new Date().toISOString(),
@@ -140,8 +171,6 @@ const Storage = {
   clearSocietyData(societyId) {
     localStorage.removeItem(this._key(societyId, 'invites'));
     localStorage.removeItem(this._key(societyId, 'logs'));
+    localStorage.removeItem(this._key(societyId, 'people'));
   },
 };
-
-// Future D1 adapter sketch (do not use yet):
-// const D1Adapter = { async listInvites(societyId) { return fetch(`/api/${societyId}/invites`).then(r => r.json()) } ... }
