@@ -1,6 +1,6 @@
 /**
  * EntryQ – Core app shell
- * Loads modules: utils → storage → boot → guard → resident → admin → this file
+ * Modules: utils → storage → boot → guard → resident → people → admin → app
  */
 
 const App = {
@@ -15,13 +15,14 @@ const App = {
     this.bindRole();
     Guard.bind();
     Resident.bind();
+    People.bind();
     Admin.bind();
     Boot.renderSocietyList();
     this.startClock();
   },
 
   bindRole() {
-    document.getElementById('btn-back-boot').addEventListener('click', () => {
+    document.getElementById('btn-back-boot')?.addEventListener('click', () => {
       this.state.societyId = null;
       this.showView('boot');
     });
@@ -37,14 +38,15 @@ const App = {
 
   showView(name) {
     document.querySelectorAll('.view').forEach((v) => v.classList.remove('active'));
-    document.getElementById('view-' + name).classList.add('active');
+    const el = document.getElementById('view-' + name);
+    if (el) el.classList.add('active');
   },
 
   startClock() {
     const el = document.getElementById('kiosk-clock');
+    if (!el) return;
     const tick = () => {
-      const now = new Date();
-      el.textContent = now.toLocaleTimeString([], {
+      el.textContent = new Date().toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',

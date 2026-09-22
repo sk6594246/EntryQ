@@ -1,4 +1,4 @@
-const CACHE = 'entryq-v3';
+const CACHE = 'entryq-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   './js/boot.js',
   './js/guard.js',
   './js/resident.js',
+  './js/people.js',
   './js/admin.js',
   './js/app.js',
   './manifest.json',
