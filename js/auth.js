@@ -66,11 +66,13 @@ const Auth = {
       return;
     }
 
+    // Must capture role BEFORE closeModal() which clears pendingRole
+    const role = this.pendingRole;
     App.state.person = person;
-    App.state.role = this.pendingRole;
+    App.state.role = role;
     this.closeModal();
 
-    if (this.pendingRole === 'guard') Guard.enter();
-    else if (this.pendingRole === 'resident') Resident.enter();
+    if (role === 'guard') Guard.enter();
+    else if (role === 'resident') Resident.enter();
   },
 };
