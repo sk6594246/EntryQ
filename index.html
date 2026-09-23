@@ -117,7 +117,6 @@
         <label>Issue *</label><input name="title" class="input" required />
         <label>Details</label><input name="detail" class="input" />
         <label>Unit</label><input name="unit" class="input" />
-        <label>Photo</label><input name="photo" type="file" accept="image/*" class="input" />
         <button type="submit" class="btn btn-primary btn-block">Raise ticket (24h SLA)</button>
       </form>
       <div id="res-ticket-list" class="log-list"></div>
@@ -222,20 +221,20 @@
   </div>
 </div>
 
-<script src="js/utils.js?v=7"></script>
-<script src="js/storage.js?v=7"></script>
-<script src="js/storage-ops.js?v=7"></script>
-<script src="js/bus.js?v=7"></script>
-<script src="js/boot.js?v=7"></script>
-<script src="js/auth.js?v=7"></script>
-<script src="js/approvals.js?v=7"></script>
-<script src="js/notices.js?v=7"></script>
-<script src="js/amenities.js?v=7"></script>
-<script src="js/tickets.js?v=7"></script>
-<script src="js/guard.js?v=7"></script>
-<script src="js/resident.js?v=7"></script>
-<script src="js/people.js?v=7"></script>
-<script src="js/admin.js?v=7"></script>
-<script src="js/app.js?v=7"></script>
-<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=7').catch(console.warn);</script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/storage-ops.js"></script>
+<script src="js/bus.js"></script>
+<script src="js/boot.js"></script>
+<script src="js/auth-v7.js"></script>
+<script src="js/approvals.js"></script>
+<script src="js/notices.js"></script>
+<script src="js/amenities.js"></script>
+<script src="js/tickets.js"></script>
+<script src="js/guard.js"></script>
+<script src="js/resident.js"></script>
+<script src="js/people.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/app.js"></script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(console.warn);</script>
 </body></html>
