@@ -1,4 +1,3 @@
-/** EntryQ app shell */
 const App = {
   state: { societyId: null, societyName: '', role: null, person: null },
   init() {
@@ -23,9 +22,16 @@ const App = {
     });
     Boot.renderSocietyList();
     this.startClock();
+    if (typeof Microsite !== 'undefined') Microsite.boot();
   },
   bindRole() {
     document.getElementById('btn-back-boot')?.addEventListener('click', () => {
+      if (typeof Microsite !== 'undefined' && Microsite.parseId()) {
+        this.state.person = null;
+        this.state.role = null;
+        this.showView('role');
+        return;
+      }
       this.state.societyId = null;
       this.state.person = null;
       this.state.role = null;
@@ -46,8 +52,7 @@ const App = {
   },
   showView(name) {
     document.querySelectorAll('.view').forEach((v) => v.classList.remove('active'));
-    const el = document.getElementById('view-' + name);
-    if (el) el.classList.add('active');
+    document.getElementById('view-' + name)?.classList.add('active');
   },
   startClock() {
     const el = document.getElementById('kiosk-clock');
