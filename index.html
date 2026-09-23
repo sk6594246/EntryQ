@@ -4,13 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
   <meta name="theme-color" content="#0f172a" />
-  <meta name="description" content="EntryQ – Society gate security" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>EntryQ</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
@@ -23,7 +19,6 @@
       <button id="btn-new-society" class="btn btn-primary">+ New Society</button>
     </div>
   </section>
-
   <section id="view-role" class="view">
     <header class="topbar">
       <button class="btn-icon" id="btn-back-boot">←</button>
@@ -31,11 +26,10 @@
     </header>
     <div class="role-grid">
       <button class="role-card" data-role="guard"><span class="role-title">Watchmen</span><span class="role-desc">Gate kiosk</span></button>
-      <button class="role-card" data-role="resident"><span class="role-title">Owner / Tenant</span><span class="role-desc">Passes, approvals, booking</span></button>
+      <button class="role-card" data-role="resident"><span class="role-title">Owner / Tenant</span><span class="role-desc">Passes & approvals</span></button>
       <button class="role-card" data-role="admin"><span class="role-title">Society Admin</span><span class="role-desc">People & notices</span></button>
     </div>
   </section>
-
   <section id="view-guard" class="view">
     <header class="topbar kiosk">
       <div class="kiosk-brand">EntryQ · <span id="guard-society-name"></span></div>
@@ -51,7 +45,7 @@
     <div id="guard-validate" class="tab-panel active">
       <div class="kiosk-panel">
         <h2>Scan / Enter Code</h2>
-        <input id="pass-input" class="input-xl" type="text" inputmode="numeric" placeholder="OTP" autocomplete="off" />
+        <input id="pass-input" class="input-xl" type="text" inputmode="numeric" placeholder="OTP" />
         <div class="btn-row">
           <button id="btn-validate" class="btn btn-success btn-xl">Validate</button>
           <button id="btn-clear-pass" class="btn btn-ghost">Clear</button>
@@ -68,8 +62,8 @@
           <label>Purpose</label>
           <select name="purpose" class="input"><option>Guest</option><option>Delivery</option><option>Cab / Taxi</option><option>Service</option><option>Other</option></select>
           <label>Unit *</label><input name="unit" class="input" required />
-          <label>Vehicle</label><input name="vehicle" class="input" placeholder="MH12AB1234" />
-          <label>Photo</label><input name="photo" type="file" accept="image/*" capture="environment" class="input" />
+          <label>Vehicle</label><input name="vehicle" class="input" />
+          <label>Photo</label><input name="photo" type="file" accept="image/*" class="input" />
           <button type="submit" class="btn btn-primary btn-xl">Request Approval</button>
         </form>
         <button type="button" id="btn-intercom" class="btn btn-ghost btn-block">Digital Intercom</button>
@@ -79,7 +73,6 @@
     <div id="guard-pending" class="tab-panel"><div class="kiosk-panel"><h2>Waiting for unit</h2><div id="guard-pending-list" class="log-list"></div></div></div>
     <div id="guard-logs" class="tab-panel"><div class="kiosk-panel"><h2>Today</h2><div id="today-logs" class="log-list"></div></div></div>
   </section>
-
   <section id="view-resident" class="view">
     <header class="topbar">
       <button class="btn-icon" id="btn-res-back">←</button>
@@ -117,7 +110,7 @@
         <label>Issue *</label><input name="title" class="input" required />
         <label>Details</label><input name="detail" class="input" />
         <label>Unit</label><input name="unit" class="input" />
-        <button type="submit" class="btn btn-primary btn-block">Raise ticket (24h SLA)</button>
+        <button type="submit" class="btn btn-primary btn-block">Raise ticket</button>
       </form>
       <div id="res-ticket-list" class="log-list"></div>
     </div>
@@ -141,7 +134,6 @@
       </div>
     </div>
   </section>
-
   <section id="view-admin" class="view">
     <header class="topbar">
       <button class="btn-icon" id="btn-admin-back">←</button>
@@ -204,13 +196,14 @@
     </div>
   </section>
 </div>
-
 <div id="modal-pin" class="modal hidden">
   <div class="modal-card">
     <h2 id="pin-modal-title">Login</h2>
     <p id="pin-modal-hint"></p>
     <form id="pin-form">
-      <label>Society PIN</label>
+      <label>Unit / Flat</label>
+      <select id="pin-unit" name="unit" class="input" required></select>
+      <label>PIN</label>
       <input id="pin-input" name="pin" class="input-xl" type="password" inputmode="numeric" required />
       <p id="pin-error" class="hidden"></p>
       <div class="btn-row">
@@ -220,13 +213,14 @@
     </form>
   </div>
 </div>
-
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/storage-ops.js"></script>
+<script src="js/storage-ms.js"></script>
 <script src="js/bus.js"></script>
 <script src="js/boot.js"></script>
-<script src="js/auth-v7.js"></script>
+<script src="js/microsite.js"></script>
+<script src="js/auth-v8.js"></script>
 <script src="js/approvals.js"></script>
 <script src="js/notices.js"></script>
 <script src="js/amenities.js"></script>
@@ -237,4 +231,5 @@
 <script src="js/admin.js"></script>
 <script src="js/app.js"></script>
 <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(console.warn);</script>
-</body></html>
+</body>
+</html>
