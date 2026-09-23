@@ -74,9 +74,9 @@
           <label>Phone</label><input name="phone" class="input" type="tel" />
           <label>Purpose</label>
           <select name="purpose" class="input"><option>Guest</option><option>Delivery</option><option>Cab / Taxi</option><option>Service</option><option>Other</option></select>
-          <label>Unit *</label><input name="unit" class="input" required />
+          <label>Unit *</label><input name="unit" class="input" required placeholder="e.g. 101" />
           <label>Vehicle</label><input name="vehicle" class="input" />
-          <label>Photo</label><input name="photo" type="file" accept="image/*" class="input" />
+          <label>Photo</label><input name="photo" type="file" accept="image/*" capture="environment" class="input" />
           <button type="submit" class="btn btn-primary btn-xl">Request Approval</button>
         </form>
         <button type="button" id="btn-intercom" class="btn btn-ghost btn-block">Digital Intercom</button>
@@ -232,7 +232,7 @@
 <script src="js/storage-ms.js"></script>
 <script src="js/bus.js"></script>
 <script src="js/boot.js"></script>
-<script src="js/microsite.js"></script>
+<script src="js/microsite-v2.js"></script>
 <script src="js/auth-v8.js"></script>
 <script src="js/approvals.js"></script>
 <script src="js/notices.js"></script>
