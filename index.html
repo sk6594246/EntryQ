@@ -4,231 +4,238 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
   <meta name="theme-color" content="#0f172a" />
-  <meta name="description" content="EntryQ – Fast gate security & visitor management for societies" />
+  <meta name="description" content="EntryQ – Society gate security" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>EntryQ – Gate</title>
+  <title>EntryQ</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
-  <div id="app">
-    <section id="view-boot" class="view active">
-      <div class="boot-card">
-        <div class="logo">Entry<span>Q</span></div>
-        <p class="tagline">Society Gate Security</p>
-        <div id="society-list" class="society-list"></div>
-        <button id="btn-new-society" class="btn btn-primary">+ New Society</button>
-      </div>
-    </section>
-
-    <section id="view-role" class="view">
-      <header class="topbar">
-        <button class="btn-icon" id="btn-back-boot" aria-label="Back">←</button>
-        <h1 id="society-name-label">Society</h1>
-      </header>
-      <div class="role-grid">
-        <button class="role-card" data-role="guard">
-          <span class="role-icon">🛡️</span>
-          <span class="role-title">Watchmen</span>
-          <span class="role-desc">Guard kiosk – entry & validation</span>
-        </button>
-        <button class="role-card" data-role="resident">
-          <span class="role-icon">🏠</span>
-          <span class="role-title">Owner / Tenant</span>
-          <span class="role-desc">Create guest passes (invite visitors)</span>
-        </button>
-        <button class="role-card" data-role="admin">
-          <span class="role-icon">⚙️</span>
-          <span class="role-title">Society Admin</span>
-          <span class="role-desc">People, logs & setup</span>
-        </button>
-      </div>
-    </section>
-
-    <section id="view-guard" class="view">
-      <header class="topbar kiosk">
-        <div class="kiosk-brand">EntryQ · <span id="guard-society-name"></span></div>
-        <div class="kiosk-clock" id="kiosk-clock">--:--</div>
-        <button class="btn-icon" id="btn-guard-exit" title="Exit">✕</button>
-      </header>
-      <nav class="kiosk-tabs">
-        <button class="tab active" data-tab="validate">Validate</button>
-        <button class="tab" data-tab="walkin">Walk-in</button>
-        <button class="tab" data-tab="logs">Today</button>
-      </nav>
-      <div id="guard-validate" class="tab-panel active">
-        <div class="kiosk-panel">
-          <h2>Scan / Enter Code</h2>
-          <input id="pass-input" class="input-xl" type="text" inputmode="numeric" placeholder="OTP or QR code" autocomplete="off" autofocus />
-          <div class="btn-row">
-            <button id="btn-validate" class="btn btn-success btn-xl">Validate</button>
-            <button id="btn-clear-pass" class="btn btn-ghost">Clear</button>
-          </div>
-          <div id="validate-result" class="result-box hidden"></div>
-        </div>
-      </div>
-      <div id="guard-walkin" class="tab-panel">
-        <div class="kiosk-panel">
-          <h2>Walk-in / Delivery</h2>
-          <form id="walkin-form">
-            <label>Visitor Name *</label>
-            <input name="name" class="input" required placeholder="Full name" />
-            <label>Phone</label>
-            <input name="phone" class="input" type="tel" placeholder="10-digit mobile" />
-            <label>Purpose</label>
-            <select name="purpose" class="input">
-              <option>Guest</option>
-              <option>Delivery</option>
-              <option>Cab / Taxi</option>
-              <option>Service</option>
-              <option>Other</option>
-            </select>
-            <label>Unit / Flat *</label>
-            <input name="unit" class="input" required placeholder="e.g. A-1204" />
-            <label>Photo (optional)</label>
-            <input name="photo" type="file" accept="image/*" capture="environment" class="input" />
-            <div class="btn-row">
-              <button type="submit" class="btn btn-primary btn-xl">Request Approval</button>
-            </div>
-          </form>
-          <div id="walkin-result" class="result-box hidden"></div>
-        </div>
-      </div>
-      <div id="guard-logs" class="tab-panel">
-        <div class="kiosk-panel">
-          <h2>Today’s Entries</h2>
-          <div id="today-logs" class="log-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-resident" class="view">
-      <header class="topbar">
-        <button class="btn-icon" id="btn-res-back">←</button>
-        <h1>My Passes</h1>
-        <button class="btn-icon" id="btn-res-exit">✕</button>
-      </header>
-      <div class="content">
-        <button id="btn-new-invite" class="btn btn-primary btn-block">+ Create Guest Pass</button>
-        <div id="my-invites" class="invite-list"></div>
-      </div>
-      <div id="modal-invite" class="modal hidden">
-        <div class="modal-card">
-          <h2>New Guest Pass</h2>
-          <form id="invite-form">
-            <label>Guest Name *</label>
-            <input name="guestName" class="input" required />
-            <label>Phone</label>
-            <input name="guestPhone" class="input" type="tel" />
-            <label>Valid From</label>
-            <input name="validFrom" class="input" type="datetime-local" required />
-            <label>Valid Until</label>
-            <input name="validUntil" class="input" type="datetime-local" required />
-            <label>Max Entries</label>
-            <input name="maxEntries" class="input" type="number" min="1" value="1" />
-            <label>Unit</label>
-            <input name="unit" class="input" placeholder="Your flat" required />
-            <div class="btn-row">
-              <button type="button" class="btn btn-ghost" id="btn-cancel-invite">Cancel</button>
-              <button type="submit" class="btn btn-primary">Generate Pass</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <section id="view-admin" class="view">
-      <header class="topbar">
-        <button class="btn-icon" id="btn-admin-back">←</button>
-        <h1>Society Admin</h1>
-        <button class="btn-icon" id="btn-admin-exit">✕</button>
-      </header>
-      <nav class="admin-tabs kiosk-tabs">
-        <button class="tab active" data-tab="people">People</button>
-        <button class="tab" data-tab="logs">Logs</button>
-        <button class="tab" data-tab="invites">Invites</button>
-        <button class="tab" data-tab="tools">Tools</button>
-      </nav>
-      <div class="content">
-        <div class="admin-stats" id="admin-stats"></div>
-        <div id="admin-people" class="tab-panel active">
-          <button id="btn-add-person" class="btn btn-primary btn-block">+ Add Person</button>
-          <div id="people-list" class="people-list"></div>
-        </div>
-        <div id="admin-logs" class="tab-panel">
-          <div id="admin-logs-list" class="log-list"></div>
-        </div>
-        <div id="admin-invites" class="tab-panel">
-          <div id="admin-invites-list" class="invite-list"></div>
-        </div>
-        <div id="admin-tools" class="tab-panel">
-          <button id="btn-export" class="btn btn-ghost btn-block">Export JSON (backup)</button>
-          <button id="btn-clear-data" class="btn btn-danger btn-block">Clear Society Data</button>
-        </div>
-      </div>
-      <div id="modal-person" class="modal hidden">
-        <div class="modal-card">
-          <h2 id="person-modal-title">Add Person</h2>
-          <form id="person-form">
-            <label>Name *</label>
-            <input name="name" class="input" required placeholder="Full name" />
-            <label>Phone</label>
-            <input name="phone" class="input" type="tel" placeholder="10-digit mobile" />
-            <label>Unit / Flat</label>
-            <input name="unit" class="input" placeholder="e.g. A-1204" />
-            <label>Role *</label>
-            <select name="role" class="input" required>
-              <option value="society_admin">Society Admin</option>
-              <option value="owner">Owner</option>
-              <option value="tenant">Tenant (rent)</option>
-              <option value="watchmen">Watchmen</option>
-            </select>
-            <label>Login PIN *</label>
-            <input name="pin" class="input" inputmode="numeric" pattern="[0-9]*" placeholder="4–6 digit PIN for login" />
-            <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem">Required for Watchmen, Owner & Tenant. Used at role login.</p>
-            <div class="btn-row">
-              <button type="button" class="btn btn-ghost" id="btn-cancel-person">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div id="modal-pin" class="modal hidden">
-    <div class="modal-card">
-      <h2 id="pin-modal-title">Login</h2>
-      <p id="pin-modal-hint" style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem"></p>
-      <form id="pin-form">
-        <label>Society PIN</label>
-        <input id="pin-input" name="pin" class="input-xl" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="••••" required />
-        <p id="pin-error" class="hidden" style="color:#fecaca;margin-bottom:0.75rem"></p>
-        <div class="btn-row">
-          <button type="button" class="btn btn-ghost" id="btn-cancel-pin">Cancel</button>
-          <button type="submit" class="btn btn-primary">Login</button>
-        </div>
-      </form>
+<div id="app">
+  <section id="view-boot" class="view active">
+    <div class="boot-card">
+      <div class="logo">Entry<span>Q</span></div>
+      <p class="tagline">Society Gate Security</p>
+      <div id="society-list" class="society-list"></div>
+      <button id="btn-new-society" class="btn btn-primary">+ New Society</button>
     </div>
-  </div>
+  </section>
 
-  <script src="js/utils.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/boot.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/guard.js"></script>
-  <script src="js/resident.js"></script>
-  <script src="js/people.js"></script>
-  <script src="js/admin.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(console.warn);
-    }
-  </script>
-</body>
-</html>
+  <section id="view-role" class="view">
+    <header class="topbar">
+      <button class="btn-icon" id="btn-back-boot">←</button>
+      <h1 id="society-name-label">Society</h1>
+    </header>
+    <div class="role-grid">
+      <button class="role-card" data-role="guard"><span class="role-title">Watchmen</span><span class="role-desc">Gate kiosk</span></button>
+      <button class="role-card" data-role="resident"><span class="role-title">Owner / Tenant</span><span class="role-desc">Passes, approvals, booking</span></button>
+      <button class="role-card" data-role="admin"><span class="role-title">Society Admin</span><span class="role-desc">People & notices</span></button>
+    </div>
+  </section>
+
+  <section id="view-guard" class="view">
+    <header class="topbar kiosk">
+      <div class="kiosk-brand">EntryQ · <span id="guard-society-name"></span></div>
+      <div class="kiosk-clock" id="kiosk-clock">--:--</div>
+      <button class="btn-icon" id="btn-guard-exit">✕</button>
+    </header>
+    <nav class="kiosk-tabs">
+      <button class="tab active" data-tab="validate">Validate</button>
+      <button class="tab" data-tab="walkin">Walk-in</button>
+      <button class="tab" data-tab="pending">Pending</button>
+      <button class="tab" data-tab="logs">Today</button>
+    </nav>
+    <div id="guard-validate" class="tab-panel active">
+      <div class="kiosk-panel">
+        <h2>Scan / Enter Code</h2>
+        <input id="pass-input" class="input-xl" type="text" inputmode="numeric" placeholder="OTP" autocomplete="off" />
+        <div class="btn-row">
+          <button id="btn-validate" class="btn btn-success btn-xl">Validate</button>
+          <button id="btn-clear-pass" class="btn btn-ghost">Clear</button>
+        </div>
+        <div id="validate-result" class="result-box hidden"></div>
+      </div>
+    </div>
+    <div id="guard-walkin" class="tab-panel">
+      <div class="kiosk-panel">
+        <h2>Walk-in / Delivery</h2>
+        <form id="walkin-form">
+          <label>Visitor Name *</label><input name="name" class="input" required />
+          <label>Phone</label><input name="phone" class="input" type="tel" />
+          <label>Purpose</label>
+          <select name="purpose" class="input"><option>Guest</option><option>Delivery</option><option>Cab / Taxi</option><option>Service</option><option>Other</option></select>
+          <label>Unit *</label><input name="unit" class="input" required />
+          <label>Vehicle</label><input name="vehicle" class="input" placeholder="MH12AB1234" />
+          <label>Photo</label><input name="photo" type="file" accept="image/*" capture="environment" class="input" />
+          <button type="submit" class="btn btn-primary btn-xl">Request Approval</button>
+        </form>
+        <button type="button" id="btn-intercom" class="btn btn-ghost btn-block">Digital Intercom</button>
+        <div id="walkin-result" class="result-box hidden"></div>
+      </div>
+    </div>
+    <div id="guard-pending" class="tab-panel"><div class="kiosk-panel"><h2>Waiting for unit</h2><div id="guard-pending-list" class="log-list"></div></div></div>
+    <div id="guard-logs" class="tab-panel"><div class="kiosk-panel"><h2>Today</h2><div id="today-logs" class="log-list"></div></div></div>
+  </section>
+
+  <section id="view-resident" class="view">
+    <header class="topbar">
+      <button class="btn-icon" id="btn-res-back">←</button>
+      <h1>Owner / Tenant</h1>
+      <button class="btn-icon" id="btn-res-exit">✕</button>
+    </header>
+    <nav class="res-tabs kiosk-tabs">
+      <button class="tab active" data-tab="passes">Passes</button>
+      <button class="tab" data-tab="approvals">Gate</button>
+      <button class="tab" data-tab="notices">Notices</button>
+      <button class="tab" data-tab="amenities">Book</button>
+      <button class="tab" data-tab="tickets">Tickets</button>
+    </nav>
+    <div id="res-passes" class="tab-panel active content">
+      <button id="btn-new-invite" class="btn btn-primary btn-block">+ Guest / Delivery Pass</button>
+      <div id="my-invites" class="invite-list"></div>
+    </div>
+    <div id="res-approvals" class="tab-panel content">
+      <button id="btn-refresh-approvals" class="btn btn-ghost btn-block">Refresh</button>
+      <div id="approval-list" class="log-list"></div>
+    </div>
+    <div id="res-notices" class="tab-panel content"><div id="res-notice-list" class="log-list"></div></div>
+    <div id="res-amenities" class="tab-panel content">
+      <form id="booking-form">
+        <label>Amenity</label><select name="amenityId" id="amenity-select" class="input"></select>
+        <label>Unit</label><input name="unit" class="input" />
+        <label>From</label><input name="slotStart" class="input" type="datetime-local" required />
+        <label>To</label><input name="slotEnd" class="input" type="datetime-local" required />
+        <button type="submit" class="btn btn-primary btn-block">Book slot</button>
+      </form>
+      <div id="booking-list" class="log-list"></div>
+    </div>
+    <div id="res-tickets" class="tab-panel content">
+      <form id="ticket-form">
+        <label>Issue *</label><input name="title" class="input" required />
+        <label>Details</label><input name="detail" class="input" />
+        <label>Unit</label><input name="unit" class="input" />
+        <label>Photo</label><input name="photo" type="file" accept="image/*" class="input" />
+        <button type="submit" class="btn btn-primary btn-block">Raise ticket (24h SLA)</button>
+      </form>
+      <div id="res-ticket-list" class="log-list"></div>
+    </div>
+    <div id="modal-invite" class="modal hidden">
+      <div class="modal-card">
+        <h2>New Pass</h2>
+        <form id="invite-form">
+          <label>Type</label>
+          <select name="passType" class="input"><option value="guest">Visitor</option><option value="delivery">Delivery partner</option></select>
+          <label>Name *</label><input name="guestName" class="input" required />
+          <label>Phone</label><input name="guestPhone" class="input" type="tel" />
+          <label>From</label><input name="validFrom" class="input" type="datetime-local" required />
+          <label>Until</label><input name="validUntil" class="input" type="datetime-local" required />
+          <label>Max entries</label><input name="maxEntries" class="input" type="number" min="1" value="1" />
+          <label>Unit</label><input name="unit" class="input" required />
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" id="btn-cancel-invite">Cancel</button>
+            <button type="submit" class="btn btn-primary">Generate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-admin" class="view">
+    <header class="topbar">
+      <button class="btn-icon" id="btn-admin-back">←</button>
+      <h1>Society Admin</h1>
+      <button class="btn-icon" id="btn-admin-exit">✕</button>
+    </header>
+    <nav class="admin-tabs kiosk-tabs">
+      <button class="tab active" data-tab="people">People</button>
+      <button class="tab" data-tab="logs">Logs</button>
+      <button class="tab" data-tab="invites">Invites</button>
+      <button class="tab" data-tab="notices">Notices</button>
+      <button class="tab" data-tab="tickets">Tickets</button>
+      <button class="tab" data-tab="tools">Tools</button>
+    </nav>
+    <div class="content">
+      <div class="admin-stats" id="admin-stats"></div>
+      <div id="admin-people" class="tab-panel active">
+        <button id="btn-add-person" class="btn btn-primary btn-block">+ Add Person</button>
+        <div id="people-list" class="people-list"></div>
+      </div>
+      <div id="admin-logs" class="tab-panel"><div id="admin-logs-list" class="log-list"></div></div>
+      <div id="admin-invites" class="tab-panel"><div id="admin-invites-list" class="invite-list"></div></div>
+      <div id="admin-notices" class="tab-panel">
+        <form id="notice-form">
+          <label>Title *</label><input name="title" class="input" required />
+          <label>Message</label><input name="body" class="input" />
+          <label>Priority</label>
+          <select name="priority" class="input"><option value="normal">Normal</option><option value="high">High</option><option value="emergency">Emergency</option></select>
+          <button type="submit" class="btn btn-primary btn-block">Broadcast</button>
+        </form>
+        <div id="admin-notice-list" class="log-list"></div>
+      </div>
+      <div id="admin-tickets" class="tab-panel"><div id="admin-ticket-list" class="log-list"></div></div>
+      <div id="admin-tools" class="tab-panel">
+        <button id="btn-export" class="btn btn-ghost btn-block">Export JSON</button>
+        <button id="btn-clear-data" class="btn btn-danger btn-block">Clear Society Data</button>
+      </div>
+    </div>
+    <div id="modal-person" class="modal hidden">
+      <div class="modal-card">
+        <h2 id="person-modal-title">Add Person</h2>
+        <form id="person-form">
+          <label>Name *</label><input name="name" class="input" required />
+          <label>Phone</label><input name="phone" class="input" type="tel" />
+          <label>Unit</label><input name="unit" class="input" />
+          <label>Role *</label>
+          <select name="role" class="input">
+            <option value="society_admin">Society Admin</option>
+            <option value="owner">Owner</option>
+            <option value="tenant">Tenant (rent)</option>
+            <option value="watchmen">Watchmen</option>
+          </select>
+          <label>Login PIN *</label><input name="pin" class="input" inputmode="numeric" />
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" id="btn-cancel-person">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="modal-pin" class="modal hidden">
+  <div class="modal-card">
+    <h2 id="pin-modal-title">Login</h2>
+    <p id="pin-modal-hint"></p>
+    <form id="pin-form">
+      <label>Society PIN</label>
+      <input id="pin-input" name="pin" class="input-xl" type="password" inputmode="numeric" required />
+      <p id="pin-error" class="hidden"></p>
+      <div class="btn-row">
+        <button type="button" class="btn btn-ghost" id="btn-cancel-pin">Cancel</button>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/storage-ops.js"></script>
+<script src="js/bus.js"></script>
+<script src="js/boot.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/approvals.js"></script>
+<script src="js/notices.js"></script>
+<script src="js/amenities.js"></script>
+<script src="js/tickets.js"></script>
+<script src="js/guard.js"></script>
+<script src="js/resident.js"></script>
+<script src="js/people.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/app.js"></script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(console.warn);</script>
+</body></html>
