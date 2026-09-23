@@ -7,7 +7,7 @@
   <title>EntryQ</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/app.css" />
+  <link rel="stylesheet" href="css/app-v9.css" />
 </head>
 <body>
 <div id="app">
@@ -24,10 +24,23 @@
       <button class="btn-icon" id="btn-back-boot">←</button>
       <h1 id="society-name-label">Society</h1>
     </header>
+    <p class="view-role-hint">Choose how you use EntryQ in this society</p>
     <div class="role-grid">
-      <button class="role-card" data-role="guard"><span class="role-title">Watchmen</span><span class="role-desc">Gate kiosk</span></button>
-      <button class="role-card" data-role="resident"><span class="role-title">Owner / Tenant</span><span class="role-desc">Passes & approvals</span></button>
-      <button class="role-card" data-role="admin"><span class="role-title">Society Admin</span><span class="role-desc">People & notices</span></button>
+      <button type="button" class="role-card" data-role="guard">
+        <span class="role-icon" aria-hidden="true">🛡️</span>
+        <span class="role-title">Watchmen</span>
+        <span class="role-desc">Gate kiosk · validate OTP · walk-ins</span>
+      </button>
+      <button type="button" class="role-card" data-role="resident">
+        <span class="role-icon" aria-hidden="true">🏠</span>
+        <span class="role-title">Owner / Tenant</span>
+        <span class="role-desc">Guest passes · gate approvals · tickets</span>
+      </button>
+      <button type="button" class="role-card" data-role="admin">
+        <span class="role-icon" aria-hidden="true">⚙️</span>
+        <span class="role-title">Society Admin</span>
+        <span class="role-desc">People · notices · logs · tools</span>
+      </button>
     </div>
   </section>
   <section id="view-guard" class="view">
